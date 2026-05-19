@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>krill — small, calm Linux apps</title>
+    <meta name="description" content="A family of small, calm, single-purpose Linux apps. No settings panels, no telemetry, no dark mode. Native Tauri, AppImage and .deb." />
+    <meta property="og:title" content="krill — small, calm Linux apps" />
+    <meta property="og:description" content="A family of small, calm, single-purpose Linux apps. Free and open source." />
+    <link rel="icon" href="favicon.svg" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #fafaff;
+        --ink: #30343f;
+        --muted: #878472;
+        --accent: #dd7596;
+        --accent-strong: #ff82bf;
+        --rule: rgba(48, 52, 63, 0.08);
+        --rule-strong: rgba(48, 52, 63, 0.18);
+        --mono: "JetBrains Mono", "Source Code Pro", ui-monospace, monospace;
+        --sans: "Inter", system-ui, sans-serif;
+        --serif: "Source Serif 4", Charter, Georgia, serif;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: var(--sans);
+        font-size: 17px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+      ::selection { background: rgba(221, 117, 150, 0.22); text-shadow: none; }
+
+      a {
+        color: var(--accent);
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color 120ms ease, color 120ms ease;
+      }
+      a:hover { color: var(--accent-strong); border-bottom-color: currentColor; }
+
+      .wrap {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 0 32px;
+      }
+
+      /* Nav --------------------------------------------------------- */
+      nav.top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 28px 0;
+        font-family: var(--mono);
+        font-size: 14px;
+      }
+      nav.top .brand {
+        color: var(--ink);
+        font-weight: 500;
+        letter-spacing: -0.01em;
+      }
+      nav.top .brand::before {
+        content: "";
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: var(--accent);
+        border-radius: 50%;
+        margin-right: 10px;
+        transform: translateY(-1px);
+      }
+      nav.top ul {
+        list-style: none;
+        display: flex;
+        gap: 28px;
+        margin: 0;
+        padding: 0;
+      }
+      nav.top a { color: var(--muted); border: none; }
+      nav.top a:hover { color: var(--ink); }
+
+      /* Hero -------------------------------------------------------- */
+      .hero { padding: 96px 0 80px; }
+      .eyebrow {
+        font-family: var(--mono);
+        font-size: 13px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        margin-bottom: 28px;
+      }
+      h1 {
+        font-family: var(--serif);
+        font-weight: 400;
+        font-size: clamp(44px, 7vw, 76px);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        margin: 0 0 24px;
+        max-width: 18ch;
+      }
+      h1 em {
+        font-style: italic;
+        color: var(--accent);
+      }
+      .lede {
+        font-family: var(--serif);
+        font-size: clamp(19px, 2vw, 22px);
+        line-height: 1.55;
+        color: var(--ink);
+        max-width: 56ch;
+        margin: 0 0 40px;
+        opacity: 0.82;
+      }
+      .cta {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 22px;
+        font-family: var(--mono);
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        transition: transform 120ms ease, background 120ms ease, border-color 120ms ease, color 120ms ease;
+      }
+      .btn-primary { background: var(--ink); color: var(--bg); }
+      .btn-primary:hover { background: var(--accent); color: var(--bg); transform: translateY(-1px); }
+      .btn-secondary { color: var(--ink); border-color: var(--rule-strong); }
+      .btn-secondary:hover { border-color: var(--ink); color: var(--ink); }
+      .btn .size { color: var(--muted); font-weight: 400; }
+      .btn-primary .size { color: rgba(250, 250, 255, 0.55); }
+      .meta {
+        margin-top: 22px;
+        font-family: var(--mono);
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .meta strong { color: var(--ink); font-weight: 500; }
+
+      /* Sections ---------------------------------------------------- */
+      section {
+        padding: 96px 0;
+        border-top: 1px solid var(--rule);
+      }
+      .section-label {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        margin-bottom: 16px;
+      }
+      h2 {
+        font-family: var(--serif);
+        font-weight: 400;
+        font-size: clamp(32px, 4vw, 44px);
+        line-height: 1.15;
+        letter-spacing: -0.015em;
+        margin: 0 0 48px;
+        max-width: 22ch;
+      }
+
+      /* Apps grid --------------------------------------------------- */
+      .apps {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+      }
+      .app {
+        display: flex;
+        flex-direction: column;
+        padding: 28px 28px 24px;
+        background: var(--bg);
+        border: 1px solid var(--rule);
+        border-radius: 12px;
+        text-decoration: none;
+        color: var(--ink);
+        transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+      }
+      .app:hover {
+        border-color: var(--rule-strong);
+        transform: translateY(-2px);
+        box-shadow:
+          0 18px 32px -20px rgba(48, 52, 63, 0.16),
+          0 6px 12px -8px rgba(48, 52, 63, 0.08);
+      }
+      .app:hover .app-name { color: var(--accent); }
+      .app-icon {
+        display: inline-flex;
+        width: 28px;
+        height: 28px;
+        margin-bottom: 14px;
+        color: var(--ink);
+      }
+      .app-tag {
+        display: block;
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--accent);
+        margin-bottom: 8px;
+        letter-spacing: 0.02em;
+      }
+      .app-name {
+        font-family: var(--sans);
+        font-size: 22px;
+        font-weight: 600;
+        letter-spacing: -0.015em;
+        margin: 0 0 6px;
+        transition: color 120ms ease;
+      }
+      .app-desc {
+        font-size: 15px;
+        line-height: 1.55;
+        color: var(--muted);
+        margin: 0 0 18px;
+      }
+      .app-meta {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--muted);
+        padding-top: 14px;
+        border-top: 1px dashed var(--rule);
+      }
+      .app-arrow {
+        color: var(--muted);
+        transition: color 120ms ease, transform 120ms ease;
+      }
+      .app:hover .app-arrow { color: var(--accent); transform: translateX(2px); }
+
+      /* Principles -------------------------------------------------- */
+      .principles {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 56px;
+      }
+      .principle {
+        border-left: 2px solid var(--accent);
+        padding-left: 20px;
+      }
+      .principle strong {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+      }
+      .principle span {
+        color: var(--muted);
+        font-size: 16px;
+      }
+
+      /* Install ----------------------------------------------------- */
+      .install {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        gap: 56px;
+      }
+      .install-copy p { color: var(--muted); max-width: 44ch; }
+      .install-box {
+        background: rgba(48, 52, 63, 0.03);
+        border: 1px solid var(--rule);
+        border-radius: 10px;
+        padding: 24px;
+      }
+      .install-box h3 {
+        font-family: var(--mono);
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin: 0 0 14px;
+        font-weight: 500;
+      }
+      .install-box pre {
+        margin: 0;
+        font-family: var(--mono);
+        font-size: 13.5px;
+        line-height: 1.7;
+        color: var(--ink);
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+      .install-box pre .c { color: var(--muted); }
+      .install-box hr {
+        border: none;
+        border-top: 1px solid var(--rule);
+        margin: 22px 0;
+      }
+
+      /* Footer ------------------------------------------------------ */
+      footer {
+        padding: 48px 0 64px;
+        border-top: 1px solid var(--rule);
+        font-family: var(--mono);
+        font-size: 13px;
+        color: var(--muted);
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      footer a { color: var(--muted); border: none; }
+      footer a:hover { color: var(--ink); }
+
+      @media (max-width: 720px) {
+        .wrap { padding: 0 22px; }
+        nav.top ul { gap: 18px; }
+        .hero { padding: 56px 0 40px; }
+        section { padding: 72px 0; }
+        .apps,
+        .principles,
+        .install {
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+        .principles { gap: 40px; }
+        .install { gap: 40px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <nav class="top">
+        <div class="brand">krill</div>
+        <ul>
+          <li><a href="#apps">Apps</a></li>
+          <li><a href="#principles">Principles</a></li>
+          <li><a href="#install">Install</a></li>
+          <li><a href="https://github.com/krill-software">GitHub</a></li>
+        </ul>
+      </nav>
+
+      <header class="hero">
+        <div class="eyebrow">Native Linux apps</div>
+        <h1>Apps that don't make your eyes bleed or your mind <em>hurt</em>.</h1>
+        <p class="lede">
+          Building native Linux apps that don't make your eyes bleed or your
+          mind hurt. Not too smart, not too big. One job per app, no settings
+          panels, no telemetry, no dark mode.
+        </p>
+        <div class="cta">
+          <a class="btn btn-primary" href="#apps">
+            See the apps
+          </a>
+          <a class="btn btn-secondary" href="https://github.com/krill-software">
+            Source on GitHub
+          </a>
+        </div>
+        <div class="meta">
+          <strong>8 apps</strong> · Linux x86_64 · AppImage · .deb · MIT
+        </div>
+      </header>
+
+      <section id="apps">
+        <div class="section-label">Apps</div>
+        <h2>Eight tools. One suite.</h2>
+        <div class="apps">
+
+          <a class="app" href="https://krill-software.github.io/text-editor/">
+            <span class="app-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M8 2v4M16 2v4"/><path d="M10 9h4M10 13h4M10 17h2"/></svg>
+            </span>
+            <span class="app-tag">.txt · .log · .conf</span>
+            <p class="app-name">Text Editor</p>
+            <p class="app-desc">A minimal plain-text editor. Open, edit, save. No language modes, no syntax highlighting.</p>
+            <span class="app-meta"><span>krill-text-editor</span><span class="app-arrow">→</span></span>
+          </a>
+
+          <a class="app" href="https://krill-software.github.io/markdown-editor/">
+            <span class="app-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22h6a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v9.5"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10.4 12.6a2 2 0 1 1 3 3L8 21l-4 1 1-4Z"/></svg>
+            </span>
+            <span class="app-tag">.md</span>
+            <p class="app-name">Markdown Editor</p>
+            <p class="app-desc">Typography-first markdown editor with muted syntax, on-demand preview, and KaTeX + Mermaid in the render pane.</p>
+            <span class="app-meta"><span>krill-markdown-editor</span><span class="app-arrow">→</span></span>
+          </a>
+
+          <a class="app" href="https://krill-software.github.io/csv-editor/">
+            <span class="app-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 9h18M3 15h18"/><rect width="18" height="18" x="3" y="3" rx="2"/></svg>
+            </span>
+            <span class="app-tag">.csv</span>
+            <p class="app-name">CSV Editor</p>
+            <p class="app-desc">Spreadsheet-shaped grid for comma-separated files. Virtualized rendering, Excel-keyed editing, RFC-4180 parsing.</p>
+            <span class="app-meta"><span>krill-csv-editor</span><span class="app-arrow">→</span></span>
+          </a>
+
+          <a class="app" href="https://krill-software.github.io/document-viewer/">
+            <span class="app-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+            </span>
+            <span class="app-tag">.pdf</span>
+            <p class="app-name">Document Viewer</p>
+            <p class="app-desc">A PDF reader with lazy page rendering, real text selection, and a thumbnail sidebar. PDF.js under the hood.</p>
+            <span class="app-meta"><span>krill-document-viewer</span><span class="app-arrow">→</span></span>
+          </a>
+
+          <a class="app" href="https://krill-software.github.io/rss-reader/">
+            <span class="app-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5"/></svg>
+            </span>
+            <span class="app-tag">.opml</span>
+            <p class="app-name">RSS Reader</p>
+            <p class="app-desc">Three-column reader for OPML feed lists. Local sync, no accounts, no daemon. Just an OPML and a window.</p>
+            <span class="app-meta"><span>krill-rss-reader</span><span class="app-arrow">→</span></span>
+          </a>
+
+          <a class="app" href="https://krill-software.github.io/image-editor/">
+            <span class="app-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/></svg>
+            </span>
+            <span class="app-tag">PNG · JPEG · WebP · BMP · TIFF · GIF · ICO</span>
+            <p class="app-name">Image Editor</p>
+            <p class="app-desc">Crop, rotate, flip, resize, brightness, contrast, saturation, filters. Bake to any common raster format.</p>
+            <span class="app-meta"><span>krill-image-editor</span><span class="app-arrow">→</span></span>
+          </a>
+
+          <a class="app" href="https://krill-software.github.io/image-viewer/">
+            <span class="app-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+            </span>
+            <span class="app-tag">any image</span>
+            <p class="app-name">Image Viewer</p>
+            <p class="app-desc">Open an image. Zoom, pan, fullscreen. No filters, no metadata panel, no thumbnails.</p>
+            <span class="app-meta"><span>krill-image-viewer</span><span class="app-arrow">→</span></span>
+          </a>
+
+          <a class="app" href="https://krill-software.github.io/terminal/">
+            <span class="app-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 11 2-2-2-2"/><path d="M11 13h4"/><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/></svg>
+            </span>
+            <span class="app-tag">$SHELL</span>
+            <p class="app-name">Terminal</p>
+            <p class="app-desc">PTY-backed terminal with a multi-line command composer and a tagged snippet library. shellcheck inline.</p>
+            <span class="app-meta"><span>krill-terminal</span><span class="app-arrow">→</span></span>
+          </a>
+
+        </div>
+      </section>
+
+      <section id="principles">
+        <div class="section-label">Principles</div>
+        <h2>A small set of binding rules.</h2>
+        <div class="principles">
+          <div class="principle">
+            <strong>One job per app.</strong>
+            <span>Single-purpose binaries. No mode menu, no plugin surface.</span>
+          </div>
+          <div class="principle">
+            <strong>No settings panel.</strong>
+            <span>If there's nothing meaningful to configure, there shouldn't be a place to look.</span>
+          </div>
+          <div class="principle">
+            <strong>One theme, locked.</strong>
+            <span>Five colors. The product has a look, not a thousand looks.</span>
+          </div>
+          <div class="principle">
+            <strong>Stillness.</strong>
+            <span>No popups, no toasts, no boot-time notifications. Quietness is the brand.</span>
+          </div>
+          <div class="principle">
+            <strong>Native Linux.</strong>
+            <span>Tauri + Rust. Real file associations. AppImage and .deb. No Electron.</span>
+          </div>
+          <div class="principle">
+            <strong>No telemetry.</strong>
+            <span>No accounts, no analytics, no anonymous metrics. The app makes one network call: the in-app updater.</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="install">
+        <div class="section-label">Install</div>
+        <h2>One line, any app.</h2>
+        <div class="install">
+          <div class="install-copy">
+            <p>
+              The same install script works for every krill app. Pass the
+              repository name as the argument; it fetches the latest
+              <code style="font-family: var(--mono); color: var(--ink)">.deb</code>
+              from GitHub Releases and registers it via
+              <code style="font-family: var(--mono); color: var(--ink)">apt</code>
+              so it survives system upgrades.
+            </p>
+            <p style="margin-top: 20px">
+              Prefer AppImages? Download from each app's releases page and
+              the in-app updater handles the rest via Help → Check for
+              updates…
+            </p>
+          </div>
+          <div class="install-box">
+            <h3>Install any app</h3>
+<pre><span class="c"># e.g. the markdown editor</span>
+curl -fsSL https://raw.githubusercontent.com/krill-software/.github/main/install.sh \
+  | sh -s markdown-editor</pre>
+
+            <hr />
+
+            <h3>Build from source</h3>
+<pre><span class="c"># clone and build</span>
+git clone https://github.com/krill-software/&lt;app&gt;
+cd &lt;app&gt; &amp;&amp; pnpm install
+pnpm tauri build</pre>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <div>© krill · MIT licensed · No tracking, no accounts</div>
+        <div>
+          <a href="https://github.com/krill-software">github.com/krill-software</a>
+          &nbsp;·&nbsp;
+          <a href="https://github.com/krill-software/.github/blob/main/PHILOSOPHY.md">Philosophy</a>
+          &nbsp;·&nbsp;
+          <a href="https://github.com/krill-software/.github/blob/main/STYLE.md">Style</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
