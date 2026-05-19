@@ -1,0 +1,44 @@
+/* The krill palette. Five named colors + alpha derivations for rules.
+ * System-following dark mode: same five names, background and ink
+ * invert into the Space-Cadet hue family. No other colors anywhere
+ * in krill app surfaces — see krill-software/.github/STYLE.md. */
+
+:root {
+  /* Light mode (default). */
+  --fm-bg:           #FAFAFF;          /* Ghost White — background */
+  --fm-text:         #30343F;          /* Space Cadet — body text, primary ink */
+  --fm-muted:        #878472;          /* Artichoke — muted text, secondary labels */
+  --fm-accent:       #DD7596;          /* Shimmering Blush — accent (cursor, selection, dirty marker) */
+  --fm-accent-strong:#FF82BF;          /* Brilliant Rose — strong accent (hover, primary CTAs) */
+
+  --fm-rule:         rgba(48, 52, 63, 0.08);   /* fine rules, subtle hover backgrounds */
+  --fm-rule-strong:  rgba(48, 52, 63, 0.16);   /* stronger rules, selected-row backgrounds */
+
+  --fm-selection:    rgba(221, 117, 150, 0.22); /* alpha-derived from --fm-accent */
+
+  /* Color scheme hint to the webview so native form controls + scrollbars
+   * track the mode. Set on :root so every descendant inherits. */
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Background sinks into a deeper Space-Cadet hue rather than pure
+     * black. Ink lifts to an off-white. The two pinks (accent /
+     * accent-strong) stay put — they're recognizable in both modes and
+     * keep the brand consistent across the toggle. Artichoke lifts a
+     * touch so muted text still reads as muted, not invisible. */
+    --fm-bg:           #1B1D26;        /* deeper Space Cadet */
+    --fm-text:         #E5E5EC;        /* lifted off-white */
+    --fm-muted:        #A4A290;        /* lifted Artichoke */
+    --fm-accent:       #DD7596;        /* unchanged — reads on both */
+    --fm-accent-strong:#FF82BF;        /* unchanged */
+
+    --fm-rule:         rgba(229, 229, 236, 0.08);   /* alpha-ink, flipped */
+    --fm-rule-strong:  rgba(229, 229, 236, 0.16);
+
+    --fm-selection:    rgba(221, 117, 150, 0.28);   /* slightly stronger to read on dark */
+
+    color-scheme: dark;
+  }
+}

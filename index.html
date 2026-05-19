@@ -8,19 +8,13 @@
     <meta property="og:title" content="krill — small, calm Linux apps" />
     <meta property="og:description" content="A family of small, calm, single-purpose Linux apps. Free and open source." />
     <link rel="icon" href="favicon.svg" />
+    <link rel="stylesheet" href="/palette.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap"
       rel="stylesheet"
     />
     <style>
       :root {
-        --bg: #fafaff;
-        --ink: #30343f;
-        --muted: #878472;
-        --accent: #dd7596;
-        --accent-strong: #ff82bf;
-        --rule: rgba(48, 52, 63, 0.08);
-        --rule-strong: rgba(48, 52, 63, 0.18);
         --mono: "JetBrains Mono", "Source Code Pro", ui-monospace, monospace;
         --sans: "Inter", system-ui, sans-serif;
         --serif: "Source Serif 4", Charter, Georgia, serif;
@@ -29,8 +23,8 @@
       * { box-sizing: border-box; }
       html, body { margin: 0; padding: 0; }
       body {
-        background: var(--bg);
-        color: var(--ink);
+        background: var(--fm-bg);
+        color: var(--fm-text);
         font-family: var(--sans);
         font-size: 17px;
         line-height: 1.6;
@@ -40,12 +34,12 @@
       ::selection { background: rgba(221, 117, 150, 0.22); text-shadow: none; }
 
       a {
-        color: var(--accent);
+        color: var(--fm-accent);
         text-decoration: none;
         border-bottom: 1px solid transparent;
         transition: border-color 120ms ease, color 120ms ease;
       }
-      a:hover { color: var(--accent-strong); border-bottom-color: currentColor; }
+      a:hover { color: var(--fm-accent-strong); border-bottom-color: currentColor; }
 
       .wrap {
         max-width: 960px;
@@ -63,7 +57,7 @@
         font-size: 14px;
       }
       nav.top .brand {
-        color: var(--ink);
+        color: var(--fm-text);
         font-weight: 500;
         letter-spacing: -0.01em;
       }
@@ -72,7 +66,7 @@
         display: inline-block;
         width: 8px;
         height: 8px;
-        background: var(--accent);
+        background: var(--fm-accent);
         border-radius: 50%;
         margin-right: 10px;
         transform: translateY(-1px);
@@ -84,15 +78,15 @@
         margin: 0;
         padding: 0;
       }
-      nav.top a { color: var(--muted); border: none; }
-      nav.top a:hover { color: var(--ink); }
+      nav.top a { color: var(--fm-muted); border: none; }
+      nav.top a:hover { color: var(--fm-text); }
 
       /* Hero -------------------------------------------------------- */
       .hero { padding: 96px 0 80px; }
       .eyebrow {
         font-family: var(--mono);
         font-size: 13px;
-        color: var(--muted);
+        color: var(--fm-muted);
         text-transform: uppercase;
         letter-spacing: 0.12em;
         margin-bottom: 28px;
@@ -108,13 +102,13 @@
       }
       h1 em {
         font-style: italic;
-        color: var(--accent);
+        color: var(--fm-accent);
       }
       .lede {
         font-family: var(--serif);
         font-size: clamp(19px, 2vw, 22px);
         line-height: 1.55;
-        color: var(--ink);
+        color: var(--fm-text);
         max-width: 56ch;
         margin: 0 0 40px;
         opacity: 0.82;
@@ -137,29 +131,29 @@
         border: 1px solid transparent;
         transition: transform 120ms ease, background 120ms ease, border-color 120ms ease, color 120ms ease;
       }
-      .btn-primary { background: var(--ink); color: var(--bg); }
-      .btn-primary:hover { background: var(--accent); color: var(--bg); transform: translateY(-1px); }
-      .btn-secondary { color: var(--ink); border-color: var(--rule-strong); }
-      .btn-secondary:hover { border-color: var(--ink); color: var(--ink); }
-      .btn .size { color: var(--muted); font-weight: 400; }
+      .btn-primary { background: var(--fm-text); color: var(--fm-bg); }
+      .btn-primary:hover { background: var(--fm-accent); color: var(--fm-bg); transform: translateY(-1px); }
+      .btn-secondary { color: var(--fm-text); border-color: var(--fm-rule-strong); }
+      .btn-secondary:hover { border-color: var(--fm-text); color: var(--fm-text); }
+      .btn .size { color: var(--fm-muted); font-weight: 400; }
       .btn-primary .size { color: rgba(250, 250, 255, 0.55); }
       .meta {
         margin-top: 22px;
         font-family: var(--mono);
         font-size: 13px;
-        color: var(--muted);
+        color: var(--fm-muted);
       }
-      .meta strong { color: var(--ink); font-weight: 500; }
+      .meta strong { color: var(--fm-text); font-weight: 500; }
 
       /* Sections ---------------------------------------------------- */
       section {
         padding: 96px 0;
-        border-top: 1px solid var(--rule);
+        border-top: 1px solid var(--fm-rule);
       }
       .section-label {
         font-family: var(--mono);
         font-size: 12px;
-        color: var(--muted);
+        color: var(--fm-muted);
         text-transform: uppercase;
         letter-spacing: 0.14em;
         margin-bottom: 16px;
@@ -184,33 +178,33 @@
         display: flex;
         flex-direction: column;
         padding: 28px 28px 24px;
-        background: var(--bg);
-        border: 1px solid var(--rule);
+        background: var(--fm-bg);
+        border: 1px solid var(--fm-rule);
         border-radius: 12px;
         text-decoration: none;
-        color: var(--ink);
+        color: var(--fm-text);
         transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
       }
       .app:hover {
-        border-color: var(--rule-strong);
+        border-color: var(--fm-rule-strong);
         transform: translateY(-2px);
         box-shadow:
           0 18px 32px -20px rgba(48, 52, 63, 0.16),
           0 6px 12px -8px rgba(48, 52, 63, 0.08);
       }
-      .app:hover .app-name { color: var(--accent); }
+      .app:hover .app-name { color: var(--fm-accent); }
       .app-icon {
         display: inline-flex;
         width: 28px;
         height: 28px;
         margin-bottom: 14px;
-        color: var(--ink);
+        color: var(--fm-text);
       }
       .app-tag {
         display: block;
         font-family: var(--mono);
         font-size: 12px;
-        color: var(--accent);
+        color: var(--fm-accent);
         margin-bottom: 8px;
         letter-spacing: 0.02em;
       }
@@ -225,7 +219,7 @@
       .app-desc {
         font-size: 15px;
         line-height: 1.55;
-        color: var(--muted);
+        color: var(--fm-muted);
         margin: 0 0 18px;
       }
       .app-meta {
@@ -235,15 +229,15 @@
         align-items: center;
         font-family: var(--mono);
         font-size: 12px;
-        color: var(--muted);
+        color: var(--fm-muted);
         padding-top: 14px;
-        border-top: 1px dashed var(--rule);
+        border-top: 1px dashed var(--fm-rule);
       }
       .app-arrow {
-        color: var(--muted);
+        color: var(--fm-muted);
         transition: color 120ms ease, transform 120ms ease;
       }
-      .app:hover .app-arrow { color: var(--accent); transform: translateX(2px); }
+      .app:hover .app-arrow { color: var(--fm-accent); transform: translateX(2px); }
 
       /* Principles -------------------------------------------------- */
       .principles {
@@ -252,7 +246,7 @@
         gap: 56px;
       }
       .principle {
-        border-left: 2px solid var(--accent);
+        border-left: 2px solid var(--fm-accent);
         padding-left: 20px;
       }
       .principle strong {
@@ -261,7 +255,7 @@
         font-weight: 600;
       }
       .principle span {
-        color: var(--muted);
+        color: var(--fm-muted);
         font-size: 16px;
       }
 
@@ -271,10 +265,10 @@
         grid-template-columns: 1.1fr 1fr;
         gap: 56px;
       }
-      .install-copy p { color: var(--muted); max-width: 44ch; }
+      .install-copy p { color: var(--fm-muted); max-width: 44ch; }
       .install-box {
         background: rgba(48, 52, 63, 0.03);
-        border: 1px solid var(--rule);
+        border: 1px solid var(--fm-rule);
         border-radius: 10px;
         padding: 24px;
       }
@@ -283,7 +277,7 @@
         font-size: 13px;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        color: var(--muted);
+        color: var(--fm-muted);
         margin: 0 0 14px;
         font-weight: 500;
       }
@@ -292,31 +286,31 @@
         font-family: var(--mono);
         font-size: 13.5px;
         line-height: 1.7;
-        color: var(--ink);
+        color: var(--fm-text);
         white-space: pre-wrap;
         word-break: break-all;
       }
-      .install-box pre .c { color: var(--muted); }
+      .install-box pre .c { color: var(--fm-muted); }
       .install-box hr {
         border: none;
-        border-top: 1px solid var(--rule);
+        border-top: 1px solid var(--fm-rule);
         margin: 22px 0;
       }
 
       /* Footer ------------------------------------------------------ */
       footer {
         padding: 48px 0 64px;
-        border-top: 1px solid var(--rule);
+        border-top: 1px solid var(--fm-rule);
         font-family: var(--mono);
         font-size: 13px;
-        color: var(--muted);
+        color: var(--fm-muted);
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
         gap: 16px;
       }
-      footer a { color: var(--muted); border: none; }
-      footer a:hover { color: var(--ink); }
+      footer a { color: var(--fm-muted); border: none; }
+      footer a:hover { color: var(--fm-text); }
 
       @media (max-width: 720px) {
         .wrap { padding: 0 22px; }
@@ -494,9 +488,9 @@
             <p>
               The same install script works for every krill app. Pass the
               repository name as the argument; it fetches the latest
-              <code style="font-family: var(--mono); color: var(--ink)">.deb</code>
+              <code style="font-family: var(--mono); color: var(--fm-text)">.deb</code>
               from GitHub Releases and registers it via
-              <code style="font-family: var(--mono); color: var(--ink)">apt</code>
+              <code style="font-family: var(--mono); color: var(--fm-text)">apt</code>
               so it survives system upgrades.
             </p>
             <p style="margin-top: 20px">
