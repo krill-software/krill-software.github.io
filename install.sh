@@ -48,16 +48,34 @@ echo "==> Downloading $APPIMAGE_URL"
 curl -fL --progress-bar "$APPIMAGE_URL" -o "$DEST"
 chmod +x "$DEST"
 
+# Install the icons the AppImage carries (hicolor tree at its root) into the
+# user icon theme, so the launcher entry and the dock have something to show.
+# --appimage-extract is built into the AppImage runtime (no FUSE needed).
+ICON_DIR="$HOME/.local/share/icons/hicolor"
+EXTRACT_TMP=$(mktemp -d)
+if (cd "$EXTRACT_TMP" && "$DEST" --appimage-extract 'usr/share/icons/hicolor/*' > /dev/null 2>&1); then
+  while IFS= read -r png; do
+    size_dir=$(basename "$(dirname "$(dirname "$png")")")   # e.g. 128x128
+    mkdir -p "$ICON_DIR/$size_dir/apps"
+    cp -f "$png" "$ICON_DIR/$size_dir/apps/krill-$SLUG.png"
+  done < <(find "$EXTRACT_TMP/squashfs-root/usr/share/icons/hicolor" -name '*.png' 2>/dev/null)
+fi
+rm -rf "$EXTRACT_TMP"
+
 cat > "$APP_DIR/krill-$SLUG.desktop" <<EOF
 [Desktop Entry]
 Type=Application
 Name=$DISPLAY_NAME
 Comment=$DISPLAY_NAME — part of the krill suite
 Exec=$DEST %U
+Icon=krill-$SLUG
 Terminal=false
 Categories=Utility;
 StartupWMClass=krill-$SLUG
 EOF
+
+update-desktop-database "$APP_DIR" 2>/dev/null || true
+gtk-update-icon-cache -q "$ICON_DIR" 2>/dev/null || true
 
 case ":$PATH:" in
   *":$BIN_DIR:"*) PATH_NOTE="" ;;
