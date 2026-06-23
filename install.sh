@@ -62,17 +62,31 @@ if (cd "$EXTRACT_TMP" && "$DEST" --appimage-extract 'usr/share/icons/hicolor/*' 
 fi
 rm -rf "$EXTRACT_TMP"
 
+# Carry over the file-type associations Tauri baked into the AppImage's own
+# .desktop (generated from the app's fileAssociations) so the launcher entry can
+# be picked as a handler — and set as default — for those types. The bundled
+# entry is the single source of truth; nothing app-specific is hardcoded here.
+MIME=""
+DESKTOP_TMP=$(mktemp -d)
+if (cd "$DESKTOP_TMP" && "$DEST" --appimage-extract 'usr/share/applications/*.desktop' > /dev/null 2>&1); then
+  BUNDLED=$(find "$DESKTOP_TMP/squashfs-root" -name '*.desktop' | head -n1)
+  [[ -n "$BUNDLED" ]] && MIME=$(grep -m1 '^MimeType=' "$BUNDLED" | cut -d= -f2-)
+fi
+rm -rf "$DESKTOP_TMP"
+
+# %f (a file path), not %U (a file:// URI): krill apps take a path argument.
 cat > "$APP_DIR/krill-$SLUG.desktop" <<EOF
 [Desktop Entry]
 Type=Application
 Name=$DISPLAY_NAME
 Comment=$DISPLAY_NAME — part of the krill suite
-Exec=$DEST %U
+Exec=$DEST %f
 Icon=krill-$SLUG
 Terminal=false
 Categories=Utility;
 StartupWMClass=krill-$SLUG
 EOF
+[[ -n "$MIME" ]] && printf 'MimeType=%s\n' "$MIME" >> "$APP_DIR/krill-$SLUG.desktop"
 
 update-desktop-database "$APP_DIR" 2>/dev/null || true
 gtk-update-icon-cache -q "$ICON_DIR" 2>/dev/null || true
