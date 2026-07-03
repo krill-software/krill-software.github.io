@@ -235,39 +235,36 @@
           0 28px 56px -28px rgba(48, 52, 63, 0.28),
           0 10px 20px -12px rgba(48, 52, 63, 0.12);
       }
-      .win-bar {
+      .win-titlebar {
+        position: relative;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 14px;
         padding: 8px 12px;
         border-bottom: 1px solid var(--fm-rule);
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: 10.5px;
         color: var(--fm-muted);
         flex: none;
       }
-      .win-bar .dot {
-        flex: none;
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: var(--fm-accent);
+      .win-titlebar .menu {
+        display: flex;
+        gap: 12px;
       }
-      .win-bar .title {
+      .win-titlebar .doc-title {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
         color: var(--fm-text);
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
       }
-      .win-bar .controls {
+      .controls {
         margin-left: auto;
+        font-family: var(--mono);
+        font-size: 10.5px;
+        color: var(--fm-muted);
         letter-spacing: 5px;
         white-space: nowrap;
-      }
-      .win-body {
-        padding: 14px 16px;
-        flex: 1;
-        min-height: 0;
       }
       .win-status {
         flex: none;
@@ -279,6 +276,7 @@
         font-size: 10.5px;
         color: var(--fm-muted);
       }
+      /* document layout — markdown editor */
       .win-md {
         left: 0;
         top: 28px;
@@ -287,79 +285,191 @@
         z-index: 1;
       }
       .win-md .win-body {
-        font-family: var(--serif);
-        font-size: 13px;
-        line-height: 1.65;
+        flex: 1;
+        min-height: 0;
+        padding: 22px 0;
+        width: 36ch;
+        max-width: 88%;
+        margin: 0 auto;
+        font-family: var(--mono);
+        font-size: 11.5px;
+        line-height: 1.75;
+        color: var(--fm-muted);
       }
-      .win-md h4 {
-        font-family: var(--serif);
-        font-weight: 600;
-        font-size: 17px;
-        margin: 0 0 8px;
+      .win-md .win-body p {
+        margin: 0 0 14px;
       }
-      .win-md p {
-        margin: 0 0 10px;
+      .win-md .hash {
+        color: var(--fm-accent);
+      }
+      .win-md .h {
         color: var(--fm-text);
       }
-      .win-md .cursor {
-        display: inline-block;
-        width: 2px;
-        height: 14px;
-        background: var(--fm-accent);
-        vertical-align: text-bottom;
+      /* app layout — sidebar + main pane */
+      .win-app {
+        flex-direction: row;
       }
+      .win-app .side {
+        flex: none;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid var(--fm-rule);
+        padding: 10px;
+        font-family: var(--sans);
+        font-size: 10px;
+        min-width: 0;
+      }
+      .win-app .side .glyphs {
+        display: flex;
+        gap: 9px;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--fm-muted);
+        margin: 0 0 10px 2px;
+      }
+      .win-app .side .label,
+      .win-app .group-label {
+        font-family: var(--mono);
+        font-size: 8.5px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--fm-muted);
+      }
+      .win-app .side .label {
+        margin: 9px 2px 4px;
+      }
+      .win-app .side .item {
+        padding: 4px 8px;
+        border: 1px solid transparent;
+        border-radius: 5px;
+        color: var(--fm-text);
+      }
+      .win-app .side .item.active {
+        border-color: var(--fm-accent);
+      }
+      .win-app .side .ver {
+        margin-top: auto;
+        font-family: var(--mono);
+        font-size: 9px;
+        color: var(--fm-muted);
+      }
+      .win-app .main {
+        flex: 1;
+        min-width: 0;
+        padding: 12px 14px;
+        display: flex;
+        flex-direction: column;
+      }
+      .win-app .main .controls {
+        align-self: flex-end;
+        margin: -2px 0 8px;
+      }
+      /* color editor */
       .win-colors {
         right: 0;
         top: 0;
         width: 41%;
+        height: 216px;
         z-index: 2;
       }
-      .swatches {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 8px;
+      .cards {
+        display: flex;
+        gap: 10px;
+        margin: 8px 0 14px;
       }
-      .swatch {
+      .card {
+        width: 84px;
+        text-align: center;
+      }
+      .card .chip {
         height: 44px;
         border-radius: 6px;
         border: 1px solid var(--fm-rule);
       }
-      .swatch-label {
-        margin-top: 6px;
+      .card .hex {
         font-family: var(--mono);
-        font-size: 9.5px;
+        font-size: 9px;
         color: var(--fm-muted);
-        text-align: center;
+        margin: 5px 0 4px;
       }
+      .card .pill {
+        font-family: var(--sans);
+        font-size: 8.5px;
+        color: var(--fm-text);
+        border: 1px solid var(--fm-rule);
+        border-radius: 5px;
+        padding: 2px 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      /* system monitor */
       .win-mon {
         right: 5%;
         bottom: 0;
         width: 40%;
+        height: 196px;
         z-index: 3;
       }
-      .win-mon .row {
-        display: grid;
-        grid-template-columns: 58px 1fr 34px;
-        align-items: center;
-        gap: 10px;
+      .win-mon .side {
+        width: 110px;
         font-family: var(--mono);
-        font-size: 11px;
+      }
+      .win-mon .res {
+        display: flex;
+        justify-content: space-between;
+        font-size: 9.5px;
+        color: var(--fm-text);
+        margin: 4px 2px 3px;
+      }
+      .win-mon .res .pct {
+        color: var(--fm-accent);
+      }
+      .win-mon .res .none {
         color: var(--fm-muted);
-        margin-bottom: 12px;
       }
-      .win-mon .row:last-child {
-        margin-bottom: 2px;
-      }
-      .win-mon .track {
-        height: 6px;
+      .track {
+        height: 5px;
         border-radius: 3px;
-        background: rgba(48, 52, 63, 0.08);
+        background: var(--fm-rule);
         overflow: hidden;
       }
-      .win-mon .fill {
+      .track i {
+        display: block;
         height: 100%;
         border-radius: 3px;
         background: var(--fm-accent);
+      }
+      .win-mon .mon-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        font-family: var(--mono);
+        color: var(--fm-muted);
+        font-size: 10px;
+      }
+      .win-mon .mon-head .big {
+        font-size: 26px;
+        color: var(--fm-text);
+        letter-spacing: -0.02em;
+      }
+      .win-mon .main .track {
+        margin: 6px 0 4px;
+      }
+      .win-mon .cores {
+        font-family: var(--mono);
+        font-size: 9px;
+        color: var(--fm-muted);
+        margin-bottom: 8px;
+      }
+      .win-mon .proc {
+        display: flex;
+        justify-content: space-between;
+        font-family: var(--mono);
+        font-size: 9.5px;
+        color: var(--fm-muted);
+        padding: 4px 0;
+        border-top: 1px solid var(--fm-rule);
       }
 
       /* Sections ---------------------------------------------------- */
@@ -621,84 +731,84 @@
 
       <div class="desktop" aria-hidden="true">
         <div class="win win-md">
-          <div class="win-bar">
-            <span class="dot"></span>
-            <span class="title">notes.md — Krill Markdown Editor</span>
+          <div class="win-titlebar">
+            <span>◐</span>
+            <span class="menu"
+              ><span>File</span><span>Edit</span><span>View</span
+              ><span>Help</span></span
+            >
+            <span class="doc-title">notes.md</span>
             <span class="controls">– □ ×</span>
           </div>
           <div class="win-body">
-            <h4>Field notes</h4>
+            <p><span class="hash">#</span> <span class="h">Field notes</span></p>
             <p>
               Every krill window is built from the same five colors and the
               same quiet chrome — a titlebar, the work, a status line.
             </p>
-            <p>
-              Nothing blinks, nothing docks, nothing asks to be
-              configured.<span class="cursor"></span>
-            </p>
+            <p>Nothing blinks, nothing docks, nothing asks to be configured.</p>
           </div>
-          <div class="win-status">
-            <span>notes.md</span><span>38 words · saved</span>
+          <div class="win-status"><span>v0.2.6</span><span>35 words</span></div>
+        </div>
+
+        <div class="win win-app win-colors">
+          <div class="side">
+            <div class="glyphs"><span>◐</span><span>☰</span></div>
+            <div class="item active">Palette</div>
+            <div class="label">Discover</div>
+            <div class="item">Picker</div>
+            <div class="item">Wheel</div>
+            <div class="item">Shades</div>
+          </div>
+          <div class="main">
+            <span class="controls">– □ ×</span>
+            <div class="group-label">Pink</div>
+            <div class="cards">
+              <div class="card">
+                <div class="chip" style="background: #dd7596"></div>
+                <div class="hex">#dd7596</div>
+                <div class="pill">Shimmering Blush</div>
+              </div>
+              <div class="card">
+                <div class="chip" style="background: #ff82bf"></div>
+                <div class="hex">#ff82bf</div>
+                <div class="pill">Brilliant Rose</div>
+              </div>
+            </div>
+            <div class="group-label">Neutral</div>
+            <div class="cards">
+              <div class="card">
+                <div class="chip" style="background: #878472"></div>
+              </div>
+              <div class="card">
+                <div class="chip" style="background: #fafaff"></div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="win win-colors">
-          <div class="win-bar">
-            <span class="dot"></span>
-            <span class="title">krill.gpl — Krill Color Editor</span>
+        <div class="win win-app win-mon">
+          <div class="side">
+            <div class="glyphs"><span>☰</span></div>
+            <div class="res"><span>CPU</span><span class="pct">11%</span></div>
+            <div class="track"><i style="width: 11%"></i></div>
+            <div class="res">
+              <span>Memory</span><span class="pct">36%</span>
+            </div>
+            <div class="track"><i style="width: 36%"></i></div>
+            <div class="res"><span>Storage</span><span class="none">—</span></div>
+            <div class="track"></div>
+            <div class="ver">v0.1.0</div>
+          </div>
+          <div class="main">
             <span class="controls">– □ ×</span>
+            <div class="mon-head"><span>CPU</span><span class="big">11%</span></div>
+            <div class="track"><i style="width: 11%"></i></div>
+            <div class="cores">8 cores</div>
+            <div class="proc"><span>cosmic-comp</span><span>3%</span></div>
+            <div class="proc"><span>krill-system-monitor</span><span>2%</span></div>
+            <div class="proc"><span>WebKitWebProcess</span><span>1%</span></div>
           </div>
-          <div class="win-body">
-            <div class="swatches">
-              <div>
-                <div class="swatch" style="background: #fafaff"></div>
-                <div class="swatch-label">FAFAFF</div>
-              </div>
-              <div>
-                <div class="swatch" style="background: #30343f"></div>
-                <div class="swatch-label">30343F</div>
-              </div>
-              <div>
-                <div class="swatch" style="background: #878472"></div>
-                <div class="swatch-label">878472</div>
-              </div>
-              <div>
-                <div class="swatch" style="background: #dd7596"></div>
-                <div class="swatch-label">DD7596</div>
-              </div>
-              <div>
-                <div class="swatch" style="background: #ff82bf"></div>
-                <div class="swatch-label">FF82BF</div>
-              </div>
-            </div>
-          </div>
-          <div class="win-status"><span>krill.gpl</span><span>5 colors</span></div>
-        </div>
-
-        <div class="win win-mon">
-          <div class="win-bar">
-            <span class="dot"></span>
-            <span class="title">Krill System Monitor</span>
-            <span class="controls">– □ ×</span>
-          </div>
-          <div class="win-body">
-            <div class="row">
-              <span>cpu</span>
-              <span class="track"><span class="fill" style="width: 34%; display: block"></span></span>
-              <span>34%</span>
-            </div>
-            <div class="row">
-              <span>memory</span>
-              <span class="track"><span class="fill" style="width: 61%; display: block"></span></span>
-              <span>61%</span>
-            </div>
-            <div class="row">
-              <span>disk</span>
-              <span class="track"><span class="fill" style="width: 48%; display: block"></span></span>
-              <span>48%</span>
-            </div>
-          </div>
-          <div class="win-status"><span>5 resources</span><span>calm</span></div>
         </div>
       </div>
 
