@@ -6,12 +6,12 @@
     <title>krill — small, calm Linux apps</title>
     <meta
       name="description"
-      content="A family of small, calm, single-purpose Linux apps. No settings panels, no telemetry. Native Tauri, AppImage and .deb."
+      content="A suite of fourteen small, calm, single-purpose Linux apps sharing one five-color palette. No settings panels, no telemetry. Native Tauri, AppImage and .deb."
     />
     <meta property="og:title" content="krill — small, calm Linux apps" />
     <meta
       property="og:description"
-      content="A family of small, calm, single-purpose Linux apps. Free and open source."
+      content="Fourteen small, calm, single-purpose Linux apps sharing one five-color palette. Free and open source."
     />
     <link rel="icon" href="favicon.svg" />
     <link rel="stylesheet" href="/palette.css" />
@@ -217,6 +217,151 @@
         font-weight: 500;
       }
 
+      /* Hero mock — tiled krill windows ------------------------------ */
+      .desktop {
+        position: relative;
+        height: 420px;
+        margin: 16px 0 96px;
+      }
+      .win {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        background: var(--fm-bg);
+        border: 1px solid var(--fm-rule-strong);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow:
+          0 28px 56px -28px rgba(48, 52, 63, 0.28),
+          0 10px 20px -12px rgba(48, 52, 63, 0.12);
+      }
+      .win-bar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border-bottom: 1px solid var(--fm-rule);
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--fm-muted);
+        flex: none;
+      }
+      .win-bar .dot {
+        flex: none;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--fm-accent);
+      }
+      .win-bar .title {
+        color: var(--fm-text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .win-bar .controls {
+        margin-left: auto;
+        letter-spacing: 5px;
+        white-space: nowrap;
+      }
+      .win-body {
+        padding: 14px 16px;
+        flex: 1;
+        min-height: 0;
+      }
+      .win-status {
+        flex: none;
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 12px;
+        border-top: 1px solid var(--fm-rule);
+        font-family: var(--mono);
+        font-size: 10.5px;
+        color: var(--fm-muted);
+      }
+      .win-md {
+        left: 0;
+        top: 28px;
+        width: 54%;
+        height: 364px;
+        z-index: 1;
+      }
+      .win-md .win-body {
+        font-family: var(--serif);
+        font-size: 13px;
+        line-height: 1.65;
+      }
+      .win-md h4 {
+        font-family: var(--serif);
+        font-weight: 600;
+        font-size: 17px;
+        margin: 0 0 8px;
+      }
+      .win-md p {
+        margin: 0 0 10px;
+        color: var(--fm-text);
+      }
+      .win-md .cursor {
+        display: inline-block;
+        width: 2px;
+        height: 14px;
+        background: var(--fm-accent);
+        vertical-align: text-bottom;
+      }
+      .win-colors {
+        right: 0;
+        top: 0;
+        width: 41%;
+        z-index: 2;
+      }
+      .swatches {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+      }
+      .swatch {
+        height: 44px;
+        border-radius: 6px;
+        border: 1px solid var(--fm-rule);
+      }
+      .swatch-label {
+        margin-top: 6px;
+        font-family: var(--mono);
+        font-size: 9.5px;
+        color: var(--fm-muted);
+        text-align: center;
+      }
+      .win-mon {
+        right: 5%;
+        bottom: 0;
+        width: 40%;
+        z-index: 3;
+      }
+      .win-mon .row {
+        display: grid;
+        grid-template-columns: 58px 1fr 34px;
+        align-items: center;
+        gap: 10px;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--fm-muted);
+        margin-bottom: 12px;
+      }
+      .win-mon .row:last-child {
+        margin-bottom: 2px;
+      }
+      .win-mon .track {
+        height: 6px;
+        border-radius: 3px;
+        background: rgba(48, 52, 63, 0.08);
+        overflow: hidden;
+      }
+      .win-mon .fill {
+        height: 100%;
+        border-radius: 3px;
+        background: var(--fm-accent);
+      }
+
       /* Sections ---------------------------------------------------- */
       section {
         padding: 96px 0;
@@ -414,6 +559,17 @@
         .hero {
           padding: 56px 0 40px;
         }
+        .desktop {
+          height: auto;
+          display: grid;
+          gap: 18px;
+          margin: 8px 0 64px;
+        }
+        .win {
+          position: static;
+          width: 100% !important;
+          height: auto !important;
+        }
         section {
           padding: 72px 0;
         }
@@ -438,7 +594,7 @@
         <div class="brand">krill</div>
         <ul>
           <li><a href="#apps">Apps</a></li>
-          <li><a href="#principles">Principles</a></li>
+          <li><a href="/why/">Why</a></li>
           <li><a href="#install">Install</a></li>
           <li><a href="https://github.com/krill-software">GitHub</a></li>
         </ul>
@@ -450,8 +606,9 @@
           Apps that don't make your eyes bleed or your mind <em>hurt</em>.
         </h1>
         <p class="lede">
-          Native Linux apps that don't make your eyes bleed or your mind hurt.
-          Not too smart, not too big.
+          Krill is a suite of fourteen tiny, single-purpose apps built by one
+          person — one locked five-color palette, no settings panels, no
+          telemetry, no plugins. Not too smart, not too big.
         </p>
         <div class="cta">
           <a class="btn btn-primary" href="#apps"> See the apps </a>
@@ -462,9 +619,92 @@
         <div class="meta">Linux x86_64 · AppImage · .deb · MIT</div>
       </header>
 
+      <div class="desktop" aria-hidden="true">
+        <div class="win win-md">
+          <div class="win-bar">
+            <span class="dot"></span>
+            <span class="title">notes.md — Krill Markdown Editor</span>
+            <span class="controls">– □ ×</span>
+          </div>
+          <div class="win-body">
+            <h4>Field notes</h4>
+            <p>
+              Every krill window is built from the same five colors and the
+              same quiet chrome — a titlebar, the work, a status line.
+            </p>
+            <p>
+              Nothing blinks, nothing docks, nothing asks to be
+              configured.<span class="cursor"></span>
+            </p>
+          </div>
+          <div class="win-status">
+            <span>notes.md</span><span>38 words · saved</span>
+          </div>
+        </div>
+
+        <div class="win win-colors">
+          <div class="win-bar">
+            <span class="dot"></span>
+            <span class="title">krill.gpl — Krill Color Editor</span>
+            <span class="controls">– □ ×</span>
+          </div>
+          <div class="win-body">
+            <div class="swatches">
+              <div>
+                <div class="swatch" style="background: #fafaff"></div>
+                <div class="swatch-label">FAFAFF</div>
+              </div>
+              <div>
+                <div class="swatch" style="background: #30343f"></div>
+                <div class="swatch-label">30343F</div>
+              </div>
+              <div>
+                <div class="swatch" style="background: #878472"></div>
+                <div class="swatch-label">878472</div>
+              </div>
+              <div>
+                <div class="swatch" style="background: #dd7596"></div>
+                <div class="swatch-label">DD7596</div>
+              </div>
+              <div>
+                <div class="swatch" style="background: #ff82bf"></div>
+                <div class="swatch-label">FF82BF</div>
+              </div>
+            </div>
+          </div>
+          <div class="win-status"><span>krill.gpl</span><span>5 colors</span></div>
+        </div>
+
+        <div class="win win-mon">
+          <div class="win-bar">
+            <span class="dot"></span>
+            <span class="title">Krill System Monitor</span>
+            <span class="controls">– □ ×</span>
+          </div>
+          <div class="win-body">
+            <div class="row">
+              <span>cpu</span>
+              <span class="track"><span class="fill" style="width: 34%; display: block"></span></span>
+              <span>34%</span>
+            </div>
+            <div class="row">
+              <span>memory</span>
+              <span class="track"><span class="fill" style="width: 61%; display: block"></span></span>
+              <span>61%</span>
+            </div>
+            <div class="row">
+              <span>disk</span>
+              <span class="track"><span class="fill" style="width: 48%; display: block"></span></span>
+              <span>48%</span>
+            </div>
+          </div>
+          <div class="win-status"><span>5 resources</span><span>calm</span></div>
+        </div>
+      </div>
+
       <section id="apps">
         <div class="section-label">Apps</div>
-        <h2>Many tools. One suite.</h2>
+        <h2>Fourteen tools. One suite.</h2>
         <div class="apps">
           <a class="app" href="https://krill-software.github.io/text-editor/">
             <span class="app-icon" aria-hidden="true">
@@ -938,6 +1178,9 @@
             >
           </div>
         </div>
+        <p style="margin: 48px 0 0; font-family: var(--mono); font-size: 14px">
+          <a href="/why/">The longer version — why krill exists →</a>
+        </p>
       </section>
 
       <section id="install">
@@ -986,10 +1229,7 @@ pnpm tauri build</pre>
             >github.com/krill-software</a
           >
           &nbsp;·&nbsp;
-          <a
-            href="https://github.com/krill-software/.github/blob/main/PHILOSOPHY.md"
-            >Philosophy</a
-          >
+          <a href="/why/">Why</a>
           &nbsp;·&nbsp;
           <a href="https://github.com/krill-software/.github/blob/main/STYLE.md"
             >Style</a

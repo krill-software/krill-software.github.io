@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Why krill exists — fourteen tiny apps, one palette</title>
+    <meta
+      name="description"
+      content="Why one person is building fourteen tiny Linux apps that share one locked five-color palette, no settings panels, and no telemetry."
+    />
+    <meta property="og:title" content="Why krill exists" />
+    <meta
+      property="og:description"
+      content="Fourteen tiny Linux apps, one locked five-color palette, zero settings panels. The reasoning behind the suite."
+    />
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="stylesheet" href="/palette.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Privacy-friendly analytics by Plausible -->
+    <script
+      async
+      src="https://plausible.io/js/pa-yi8cj9rrm-7E_cAIrz6-r.js"
+    ></script>
+    <script>
+      ((window.plausible =
+        window.plausible ||
+        function () {
+          (plausible.q = plausible.q || []).push(arguments);
+        }),
+        (plausible.init =
+          plausible.init ||
+          function (i) {
+            plausible.o = i || {};
+          }));
+      plausible.init();
+    </script>
+
+    <style>
+      :root {
+        --mono: "JetBrains Mono", "Source Code Pro", ui-monospace, monospace;
+        --sans: "Inter", system-ui, sans-serif;
+        --serif: "Source Serif 4", Charter, Georgia, serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: var(--fm-bg);
+        color: var(--fm-text);
+        font-family: var(--sans);
+        font-size: 17px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+      ::selection {
+        background: rgba(221, 117, 150, 0.22);
+        text-shadow: none;
+      }
+
+      a {
+        color: var(--fm-accent);
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition:
+          border-color 120ms ease,
+          color 120ms ease;
+      }
+      a:hover {
+        color: var(--fm-accent-strong);
+        border-bottom-color: currentColor;
+      }
+
+      .wrap {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 0 32px;
+      }
+
+      /* Nav --------------------------------------------------------- */
+      nav.top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 28px 0;
+        font-family: var(--mono);
+        font-size: 14px;
+      }
+      nav.top .brand {
+        color: var(--fm-text);
+        font-weight: 500;
+        letter-spacing: -0.01em;
+      }
+      nav.top .brand::before {
+        content: "";
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: var(--fm-accent);
+        border-radius: 50%;
+        margin-right: 10px;
+        transform: translateY(-1px);
+      }
+      nav.top .brand a {
+        color: inherit;
+        border: none;
+      }
+      nav.top ul {
+        list-style: none;
+        display: flex;
+        gap: 28px;
+        margin: 0;
+        padding: 0;
+      }
+      nav.top a {
+        color: var(--fm-muted);
+        border: none;
+      }
+      nav.top a:hover {
+        color: var(--fm-text);
+      }
+
+      /* Hero -------------------------------------------------------- */
+      .hero {
+        padding: 96px 0 64px;
+      }
+      .eyebrow {
+        font-family: var(--mono);
+        font-size: 13px;
+        color: var(--fm-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        margin-bottom: 28px;
+      }
+      h1 {
+        font-family: var(--serif);
+        font-weight: 400;
+        font-size: clamp(44px, 7vw, 76px);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        margin: 0 0 24px;
+        max-width: 18ch;
+      }
+      h1 em {
+        font-style: italic;
+        color: var(--fm-accent);
+      }
+      .lede {
+        font-family: var(--serif);
+        font-size: clamp(19px, 2vw, 22px);
+        line-height: 1.55;
+        color: var(--fm-text);
+        max-width: 56ch;
+        margin: 0;
+        opacity: 0.82;
+      }
+
+      /* Essay ------------------------------------------------------- */
+      section {
+        padding: 72px 0;
+        border-top: 1px solid var(--fm-rule);
+      }
+      .section-label {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--fm-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        margin-bottom: 16px;
+      }
+      h2 {
+        font-family: var(--serif);
+        font-weight: 400;
+        font-size: clamp(32px, 4vw, 44px);
+        line-height: 1.15;
+        letter-spacing: -0.015em;
+        margin: 0 0 32px;
+        max-width: 22ch;
+      }
+      section p {
+        max-width: 62ch;
+        margin: 0 0 20px;
+      }
+      section p:last-child {
+        margin-bottom: 0;
+      }
+      section strong {
+        font-weight: 600;
+      }
+      .constraint {
+        border-left: 2px solid var(--fm-accent);
+        padding-left: 20px;
+        margin: 0 0 32px;
+        max-width: 62ch;
+      }
+      .constraint:last-child {
+        margin-bottom: 0;
+      }
+      .constraint strong {
+        display: block;
+        margin-bottom: 6px;
+      }
+      .constraint p {
+        color: var(--fm-muted);
+        font-size: 16px;
+        margin: 0;
+      }
+
+      /* Palette swatches -------------------------------------------- */
+      .palette {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 12px;
+        max-width: 560px;
+        margin: 8px 0 20px;
+      }
+      .swatch {
+        height: 56px;
+        border-radius: 8px;
+        border: 1px solid var(--fm-rule);
+      }
+      .swatch-label {
+        margin-top: 8px;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--fm-muted);
+        line-height: 1.5;
+      }
+      .swatch-label b {
+        display: block;
+        font-weight: 500;
+        color: var(--fm-text);
+      }
+
+      /* CTA --------------------------------------------------------- */
+      .cta {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-top: 8px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 22px;
+        font-family: var(--mono);
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        transition:
+          transform 120ms ease,
+          background 120ms ease,
+          border-color 120ms ease,
+          color 120ms ease;
+      }
+      .btn-primary {
+        background: var(--fm-text);
+        color: var(--fm-bg);
+      }
+      .btn-primary:hover {
+        background: var(--fm-accent);
+        color: var(--fm-bg);
+        transform: translateY(-1px);
+      }
+      .btn-secondary {
+        color: var(--fm-text);
+        border-color: var(--fm-rule-strong);
+      }
+      .btn-secondary:hover {
+        border-color: var(--fm-text);
+        color: var(--fm-text);
+      }
+
+      /* Footer ------------------------------------------------------ */
+      footer {
+        padding: 48px 0 64px;
+        border-top: 1px solid var(--fm-rule);
+        font-family: var(--mono);
+        font-size: 13px;
+        color: var(--fm-muted);
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      footer a {
+        color: var(--fm-muted);
+        border: none;
+      }
+      footer a:hover {
+        color: var(--fm-text);
+      }
+
+      @media (max-width: 720px) {
+        .wrap {
+          padding: 0 22px;
+        }
+        nav.top ul {
+          gap: 18px;
+        }
+        .hero {
+          padding: 56px 0 40px;
+        }
+        section {
+          padding: 56px 0;
+        }
+        .palette {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <nav class="top">
+        <div class="brand"><a href="/">krill</a> / why</div>
+        <ul>
+          <li><a href="/#apps">Apps</a></li>
+          <li><a href="/#install">Install</a></li>
+          <li><a href="https://github.com/krill-software">GitHub</a></li>
+        </ul>
+      </nav>
+
+      <header class="hero">
+        <div class="eyebrow">Why krill exists</div>
+        <h1>Fourteen tiny apps. One <em>palette</em>.</h1>
+        <p class="lede">
+          Krill is a suite of small, single-purpose Linux apps built by one
+          person. Every app shares the same five colors, the same quiet chrome,
+          and the same refusal to grow a settings panel. This page is the
+          reasoning.
+        </p>
+      </header>
+
+      <section>
+        <div class="section-label">The problem</div>
+        <h2>Linux is a great OS wearing terrible clothes.</h2>
+        <p>
+          People don't bounce off Linux because of the kernel. They bounce off
+          it because the apps look stuck in 1998 and act like they want you to
+          read a manual first. A Windows or Mac user tries the switch, opens
+          the default image editor, and quietly goes back.
+        </p>
+        <p>
+          The usual answer is configurability — if you don't like it, theme
+          it. But configurability is the problem in a different coat. An app
+          that can look like anything usually looks like nothing, and the
+          person who most needs a calm, finished tool is the person least
+          interested in building one out of checkboxes.
+        </p>
+      </section>
+
+      <section>
+        <div class="section-label">The bet</div>
+        <h2>Not one big beautiful app. Many tiny ones that share everything.</h2>
+        <p>
+          Krill bets that the fix is a <strong>family</strong>: fourteen small
+          apps — a text editor, a markdown editor, a PDF reader, a paint
+          canvas, an RSS reader, a system monitor — that share one palette,
+          one titlebar, one window shape, one release pipeline. Open three of
+          them side by side and your desktop looks like one product, because
+          it is one.
+        </p>
+        <p>
+          Small apps stay finished. Krill Paint does not need layers to be
+          done; Krill Text Editor does not need language modes. Each app has a
+          sentence-long job, reaches 1.0, and then mostly receives bug fixes.
+          Feature creep is the failure mode — every "small addition" is one
+          more thing the next person has to learn.
+        </p>
+        <p>
+          Sharing everything is also what makes the suite maintainable by one
+          person: the chrome comes from one package, the file plumbing from
+          another, the release workflow from a third. Each new app is mostly
+          the same app with a different center.
+        </p>
+      </section>
+
+      <section>
+        <div class="section-label">The constraints</div>
+        <h2>Decisions made once, on purpose.</h2>
+
+        <div class="constraint">
+          <strong>Five colors, locked.</strong>
+          <p>
+            Every pixel of chrome in every krill app comes from these five.
+            No themes, no user palettes, no sixth color for that one
+            component. The discipline is what makes the apps feel calm.
+          </p>
+        </div>
+
+        <div class="palette" aria-label="The krill palette">
+          <div>
+            <div class="swatch" style="background: #fafaff"></div>
+            <div class="swatch-label"><b>Ghost White</b>#FAFAFF</div>
+          </div>
+          <div>
+            <div class="swatch" style="background: #30343f"></div>
+            <div class="swatch-label"><b>Space Cadet</b>#30343F</div>
+          </div>
+          <div>
+            <div class="swatch" style="background: #878472"></div>
+            <div class="swatch-label"><b>Artichoke</b>#878472</div>
+          </div>
+          <div>
+            <div class="swatch" style="background: #dd7596"></div>
+            <div class="swatch-label"><b>Shimmering Blush</b>#DD7596</div>
+          </div>
+          <div>
+            <div class="swatch" style="background: #ff82bf"></div>
+            <div class="swatch-label"><b>Brilliant Rose</b>#FF82BF</div>
+          </div>
+        </div>
+
+        <div class="constraint">
+          <strong>No settings panel.</strong>
+          <p>
+            The decisions are made on your behalf and the surface stays
+            bounded. If a feature can't be explained in a sentence, it doesn't
+            ship.
+          </p>
+        </div>
+
+        <div class="constraint">
+          <strong>One file, one window.</strong>
+          <p>
+            No tabs, no project trees, no vaults, no split panes. The work in
+            front of you is the work.
+          </p>
+        </div>
+
+        <div class="constraint">
+          <strong>No telemetry, no accounts, no cloud.</strong>
+          <p>
+            Your files live on your disk in their original format. Nothing
+            phones home — not even a crash reporter.
+          </p>
+        </div>
+
+        <div class="constraint">
+          <strong>Native, and Linux-only.</strong>
+          <p>
+            Real binaries, real file associations, XDG dirs. No Electron, no
+            web app pretending to be desktop. Windows and macOS are someone
+            else's job.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-label">How it's built</div>
+        <h2>The same app, fourteen times.</h2>
+        <p>
+          Every app is Tauri 2 — a Rust core with a TypeScript front end —
+          shipped as an AppImage and a <code style="font-family: var(--mono)">.deb</code>
+          from GitHub Releases. The shared chrome (titlebar, menus, status
+          line, the palette itself) lives in one library; the shared plumbing
+          (state dirs, file I/O, window geometry) in another. An app that
+          ships is a thin, honest layer over both.
+        </p>
+        <p>
+          Everything is MIT licensed. If you don't trust the binaries, build
+          them yourself — each repo is small enough to actually read.
+        </p>
+      </section>
+
+      <section>
+        <div class="section-label">See it</div>
+        <h2>The proof is a desktop full of krill.</h2>
+        <p>
+          Fourteen apps, one look. Install one in a line, or browse the suite
+          and pick the tool you're missing.
+        </p>
+        <div class="cta">
+          <a class="btn btn-primary" href="/#apps">See the apps</a>
+          <a class="btn btn-secondary" href="https://github.com/krill-software"
+            >Source on GitHub</a
+          >
+        </div>
+      </section>
+
+      <footer>
+        <div>© krill · MIT licensed · No tracking, no accounts</div>
+        <div>
+          <a href="https://github.com/krill-software"
+            >github.com/krill-software</a
+          >
+          &nbsp;·&nbsp;
+          <a href="/">krill.software</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
