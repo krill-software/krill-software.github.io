@@ -15,6 +15,7 @@
 :root {
   --bg: #fafaff;
   --ink: #30343f;
+  --ink-rgb: 48, 52, 63;
   --muted: #878472;
   --accent: #dd7596;
   --accent-strong: #ff82bf;
@@ -23,6 +24,23 @@
   --mono: "JetBrains Mono", "Source Code Pro", ui-monospace, monospace;
   --sans: "Inter", system-ui, sans-serif;
   --serif: "Source Serif 4", Charter, Georgia, serif;
+  color-scheme: light;
+}
+
+/* Dark mode — mirrors palette.css. Background sinks into a deeper
+ * Space Cadet, ink lifts to an off-white, the two pinks stay put.
+ * `--ink-rgb` lets page mocks derive ink-alpha tints that flip with the
+ * mode: rgba(var(--ink-rgb), 0.04). */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1b1d26;
+    --ink: #e5e5ec;
+    --ink-rgb: 229, 229, 236;
+    --muted: #a4a290;
+    --rule: rgba(229, 229, 236, 0.08);
+    --rule-strong: rgba(229, 229, 236, 0.16);
+    color-scheme: dark;
+  }
 }
 
 * { box-sizing: border-box; }
@@ -119,7 +137,7 @@ h1 em { font-style: italic; color: var(--accent); }
 .btn-secondary { color: var(--ink); border-color: var(--rule-strong); }
 .btn-secondary:hover { border-color: var(--ink); color: var(--ink); }
 .btn .size { color: var(--muted); font-weight: 400; }
-.btn-primary .size { color: rgba(250, 250, 255, 0.55); }
+.btn-primary .size { color: var(--bg); opacity: 0.55; }
 .btn svg { width: 15px; height: 15px; flex-shrink: 0; }
 
 .meta {
@@ -185,7 +203,7 @@ h2 {
 
 /* Quick install card — featured at the top. */
 .install-quick {
-  background: rgba(48, 52, 63, 0.03);
+  background: rgba(var(--ink-rgb), 0.03);
   border: 1px solid var(--rule);
   border-radius: 10px;
   padding: 24px 28px;
@@ -232,7 +250,7 @@ h2 {
   gap: 24px;
 }
 .install-option {
-  background: rgba(48, 52, 63, 0.03);
+  background: rgba(var(--ink-rgb), 0.03);
   border: 1px solid var(--rule);
   border-radius: 10px;
   padding: 24px;
@@ -253,7 +271,7 @@ h2 {
 
 /* Build-from-source section ------------------------------------ */
 .build {
-  background: rgba(48, 52, 63, 0.03);
+  background: rgba(var(--ink-rgb), 0.03);
   border: 1px solid var(--rule);
   border-radius: 10px;
   padding: 24px 28px;
