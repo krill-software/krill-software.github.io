@@ -1,0 +1,30 @@
+name: Sync app versions
+
+# Keeps the version tag on each app card current. Reads public release
+# data with the default token, so no cross-repo secrets are involved.
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: scripts/sync-versions.sh
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Commit if changed
+        run: |
+          if git diff --quiet index.html; then
+            echo "versions already current"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "Sync app versions"
+          git push
